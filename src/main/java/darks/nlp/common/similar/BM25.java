@@ -89,7 +89,12 @@ public class BM25
 		}
 	}
 	
-	
+	/**
+	 * IDF(qi)*(fi*(k1+1)/(fi+k1*(1-b+b*dl/avgdl)))
+	 * @param sentence
+	 * @param docIndex
+	 * @return
+	 */
 	public double compute(Sentence sentence, int docIndex)
 	{
 		if (idfMap == null || sentence == null || sentence.getTerms() == null)
