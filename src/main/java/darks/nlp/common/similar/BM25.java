@@ -73,6 +73,8 @@ public class BM25
 					termDocFreq.addValue(name);
 					repeat.add(name);
 				}
+				if (termDocsFreq[docIndex] == null)
+					termDocsFreq[docIndex] = new FreqCount<String>();
 				termDocsFreq[docIndex].addValue(name);
 			}
 			docIndex++;

@@ -20,6 +20,8 @@ import java.util.Collection;
 
 public class Sentence
 {
+	
+	private String content;
 
 	private Collection<Term> terms;
 	
@@ -41,6 +43,22 @@ public class Sentence
 	public void setTerms(Collection<Term> terms)
 	{
 		this.terms = terms;
+	}
+
+	public String getContent()
+	{
+		return content;
+	}
+
+	public void setContent(String content)
+	{
+		this.content = content;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Sentence [content=" + content + ", terms=" + terms + "]";
 	}
 	
 	

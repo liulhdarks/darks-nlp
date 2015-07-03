@@ -27,6 +27,16 @@ public class Term implements Serializable
 	private static final long serialVersionUID = 8618127000528330714L;
 	
 	private String name;
+	
+	public Term()
+	{
+		
+	}
+	
+	public Term(String name)
+	{
+		this.name = name;
+	}
 
 	public String getName()
 	{
