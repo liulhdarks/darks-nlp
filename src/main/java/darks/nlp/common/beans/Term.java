@@ -18,6 +18,8 @@ package darks.nlp.common.beans;
 
 import java.io.Serializable;
 
+import darks.nlp.common.NatureTagger.NatureTag;
+
 public class Term implements Serializable
 {
 
@@ -26,7 +28,9 @@ public class Term implements Serializable
 	 */
 	private static final long serialVersionUID = 8618127000528330714L;
 	
-	private String name;
+	protected String name;
+	
+	protected NatureTag natureTag;
 	
 	public Term()
 	{
@@ -36,6 +40,12 @@ public class Term implements Serializable
 	public Term(String name)
 	{
 		this.name = name;
+	}
+	
+	public Term(String name, NatureTag natureTag)
+	{
+		this.name = name;
+		this.natureTag = natureTag;
 	}
 
 	public String getName()
@@ -47,5 +57,16 @@ public class Term implements Serializable
 	{
 		this.name = name;
 	}
+
+	public NatureTag getNatureTag()
+	{
+		return natureTag;
+	}
+
+	public void setNatureTag(NatureTag natureTag)
+	{
+		this.natureTag = natureTag;
+	}
+	
 	
 }

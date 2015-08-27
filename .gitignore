@@ -21,6 +21,8 @@ bin
 *.exe
 
 /target/
+/corpus/
+/model/
 
 .git
 .settings

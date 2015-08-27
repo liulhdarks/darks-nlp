@@ -21,24 +21,22 @@ import java.util.Collection;
 import org.jblas.DoubleMatrix;
 
 import darks.nlp.common.beans.Sentence;
-import darks.nlp.common.similar.BM25;
+import darks.nlp.common.similar.JaroWinkler;
 
-public class BM25SummarySimilar extends SummarySimilar
+/**
+ * 
+ * @author lihua.llh
+ *
+ */
+public class JaroWinklerSummarySimilar extends SummarySimilar
 {
+
+	Collection<Sentence> sentences;
 	
-	BM25 bm25 = new BM25();
-
-	public BM25SummarySimilar()
-	{
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void initialize(Collection<Sentence> sentences)
 	{
-		bm25.initialize(sentences);
+		this.sentences = sentences;
 	}
 
 	/**
@@ -47,7 +45,14 @@ public class BM25SummarySimilar extends SummarySimilar
 	@Override
 	public DoubleMatrix similar(Sentence sentence)
 	{
-		return bm25.computeAll(sentence);
+		int index = 0;
+		DoubleMatrix matrix = new DoubleMatrix(sentences.size());
+		for (Sentence target : sentences)
+		{
+			double v = JaroWinkler.similar(target.getContent(), sentence.getContent());
+			matrix.put(index++, v);
+		}
+		return matrix;
 	}
 
 }

@@ -14,40 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package darks.nlp.summary;
+package darks.nlp.utils;
 
 import java.util.Collection;
 
-import org.jblas.DoubleMatrix;
-
-import darks.nlp.common.beans.Sentence;
-import darks.nlp.common.similar.BM25;
-
-public class BM25SummarySimilar extends SummarySimilar
+public final class StringUtils
 {
+
+	private StringUtils()
+	{
+		
+	}
 	
-	BM25 bm25 = new BM25();
-
-	public BM25SummarySimilar()
+	public static String stringBuffer(Object... objs)
 	{
+		StringBuilder buf = new StringBuilder();
+		for (Object obj : objs)
+		{
+			buf.append(obj);
+		}
+		return buf.toString();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void initialize(Collection<Sentence> sentences)
+	
+	public static String toCollectionString(Collection<?> c, char sep)
 	{
-		bm25.initialize(sentences);
+		StringBuilder buf = new StringBuilder();
+		for (Object obj : c)
+		{
+			buf.append(obj).append(sep);
+		}
+		if (buf.length() > 0)
+		{
+			buf.setLength(buf.length() - 1);
+		}
+		return buf.toString();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public DoubleMatrix similar(Sentence sentence)
-	{
-		return bm25.computeAll(sentence);
-	}
-
 }
