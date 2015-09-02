@@ -31,6 +31,7 @@ import darks.nlp.common.beans.Term;
 import darks.nlp.corpus.conll.CoNLLCorpus;
 import darks.nlp.corpus.conll.CoNLLSentence;
 import darks.nlp.corpus.conll.CoNLLTerm;
+import darks.nlp.dependency.MaxentDependencyFeature;
 import darks.nlp.utils.StringUtils;
 import darks.nlp.utils.ThreadUtils;
 
@@ -124,7 +125,7 @@ public class MaxentDependencyExtractor
 		return result;
 	}
 	
-	private void extractSentenceFeature(List<MaxentDependencyFeature> result, CoNLLSentence sentence)
+	public void extractSentenceFeature(List<MaxentDependencyFeature> result, CoNLLSentence sentence)
 	{
 		List<CoNLLTerm> terms = sentence.getTerms();
 		for (int i = 0; i < terms.size(); i++)
@@ -135,11 +136,11 @@ public class MaxentDependencyExtractor
 				if (i == j)
 					continue;
 				MaxentDependencyFeature feature = new MaxentDependencyFeature();
-				feature.feature = extractWordsFeature(terms, i, j);
+				feature.setFeature(extractWordsFeature(terms, i, j));
 				if (curTerm.getCenterId() == j)
-					feature.label = curTerm.getLabel();
+					feature.setLabel(curTerm.getLabel());
 				else
-					feature.label = DEFAULT_LABEL;
+					feature.setLabel(DEFAULT_LABEL);
 				result.add(feature);
 			}
 		}
@@ -213,15 +214,6 @@ public class MaxentDependencyExtractor
 		return new String[]{name, nature};
 	}
 
-
-
-	class MaxentDependencyFeature
-	{
-		List<String> feature;
-		
-		String label;
-	}
-	
 	class ExtractThread implements Callable<List<MaxentDependencyFeature>>
 	{
 		

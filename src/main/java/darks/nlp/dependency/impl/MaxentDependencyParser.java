@@ -43,7 +43,7 @@ import darks.nlp.corpus.conll.CoNLLCorpus;
 import darks.nlp.corpus.conll.CoNLLSentence;
 import darks.nlp.corpus.conll.CoNLLTerm;
 import darks.nlp.dependency.DependencyParser;
-import darks.nlp.dependency.impl.MaxentDependencyExtractor.MaxentDependencyFeature;
+import darks.nlp.dependency.MaxentDependencyFeature;
 import darks.nlp.utils.StringUtils;
 
 /**
@@ -87,8 +87,8 @@ public class MaxentDependencyParser extends DependencyParser
 		Documents docs = new Documents();
 		for (MaxentDependencyFeature feature : features)
 		{
-			String strFeature = StringUtils.toCollectionString(feature.feature, ' ');
-			docs.addData(strFeature, feature.label);
+			String strFeature = StringUtils.toCollectionString(feature.getFeature(), ' ');
+			docs.addData(strFeature, feature.getLabel());
 		}
 		maxent = new GISMaxent();
 		model = maxent.train(docs, maxIterationNumber);
