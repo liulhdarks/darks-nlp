@@ -16,10 +16,17 @@
  */
 package darks.nlp.common.beans;
 
+import java.io.Serializable;
 
-public class Keyword
+
+public class Keyword implements Serializable
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3332587168016028900L;
+
 	private String name;
 	
 	private double weight;
