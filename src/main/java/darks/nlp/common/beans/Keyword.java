@@ -19,7 +19,7 @@ package darks.nlp.common.beans;
 import java.io.Serializable;
 
 
-public class Keyword implements Serializable
+public class Keyword implements Serializable, Comparable<Keyword>
 {
 	
 	/**
@@ -101,6 +101,19 @@ public class Keyword implements Serializable
 		else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(Keyword o)
+	{
+		if (o.name.equals(name))
+			return 0;
+		int ret = Double.compare(o.weight, weight);
+		if (ret == 0)
+		{
+			ret = name.compareTo(o.name);
+		}
+		return ret;
 	}
 	
 }

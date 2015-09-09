@@ -21,11 +21,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 
 import darks.nlp.common.beans.Keyword;
 
@@ -98,7 +98,7 @@ public class TextRankKeywords
 	
 	public Set<Keyword> getKeywords(int topSize)
 	{
-		Set<Keyword> keywords = new LinkedHashSet<Keyword>();
+		Set<Keyword> keywords = new TreeSet<Keyword>();
 		for (int i = 0; i < Math.min(topSize, sortIndexList.size()); i++)
 		{
 			Entry<String, Double> entry = sortIndexList.get(i);
