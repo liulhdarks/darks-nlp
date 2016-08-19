@@ -17,13 +17,10 @@
 package darks.nlp.summary;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.jblas.DoubleMatrix;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import darks.nlp.common.beans.Sentence;
 
@@ -35,8 +32,6 @@ import darks.nlp.common.beans.Sentence;
  */
 public class TextRankSummary
 {
-	
-	private static final Logger log = LoggerFactory.getLogger(TextRankSummary.class);
 	
 	private static final double DEFAULT_D = 0.85;
 	
@@ -52,9 +47,12 @@ public class TextRankSummary
 	
 	private int sentenceCount;
 	
-	private TreeMap<Double, Integer> indexSortMap;
+//	private TreeMap<Double, Integer> indexSortMap;
+	private TreeSet<SortIndex> indexSortSet;
 	
 	private List<Sentence> sentences;
+	
+	SummaryFilter summaryFilter = new DefaultSummaryFilter();
 	
 	public TextRankSummary()
 	{
@@ -65,6 +63,12 @@ public class TextRankSummary
 	{
 		this.similar = similar;
 	}
+    
+    public TextRankSummary(SummarySimilar similar, SummaryFilter summaryFilter)
+    {
+        this.similar = similar;
+        this.summaryFilter = summaryFilter;
+    }
 
 	/**
 	 * Initialize text rank summary
@@ -139,34 +143,73 @@ public class TextRankSummary
 	{
 		buildSortTop();
 		List<Integer> result = new ArrayList<Integer>(topSize);
-		for (Integer index : indexSortMap.values())
+		for (SortIndex si : indexSortSet)
 		{
-			result.add(index);
+			result.add(si.index);
 			if (result.size() >= topSize)
 				break;
 		}
 		return result;
 	}
-	
-	public List<Sentence> getTopSentenceList(int topSize)
-	{
-		List<Integer> ids = getTopIndexList(topSize);
-		List<Sentence> result = new ArrayList<Sentence>(topSize);
-		for (Integer id : ids)
-		{
-			result.add(sentences.get(id));
-		}
-		return result;
-	}
+    
+    public List<Sentence> getTopSentenceList(int topSize)
+    {
+        buildSortTop();
+        List<Sentence> result = new ArrayList<Sentence>(topSize);
+        for (SortIndex si : indexSortSet)
+        {
+            Sentence sentence = sentences.get(si.index);
+            if (summaryFilter.filter(sentence))
+                continue;
+            result.add(sentence);
+            if (result.size() >= topSize)
+                break;
+        }
+        return result;
+    }
 	
 	private void buildSortTop()
 	{
-		if (indexSortMap != null)
-			return;
-		indexSortMap = new TreeMap<Double, Integer>(Collections.reverseOrder());
-		for (int i = 0; i < sentenceCount; i++)
-		{
-			indexSortMap.put(vector.get(i), i);
-		}
+	    if (indexSortSet != null)
+	        return;
+	    indexSortSet = new TreeSet<SortIndex>();
+	    for (int i = 0; i < sentenceCount; i++)
+	    {
+	        indexSortSet.add(new SortIndex(i, vector.get(i)));
+	    }
+	}
+	
+	class SortIndex implements Comparable<SortIndex>{
+	    
+	    int index;
+	    double weight;
+	    
+        public SortIndex(int index, double weight) {
+            this.index = index;
+            this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(SortIndex o) {
+            int p = Double.compare(o.weight, weight);
+            if (p == 0) {
+                p = index - o.index;
+            }
+            return p;
+        }
+	    
+	}
+	
+	static class DefaultSummaryFilter implements SummaryFilter {
+
+        @Override
+        public boolean filter(Sentence sentence) {
+            String content = sentence.getContent();
+            if (content == null || content.length() < 5)
+                return true;
+            else
+                return false;
+        }
+	    
 	}
 }
